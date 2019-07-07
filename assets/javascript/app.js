@@ -32,7 +32,7 @@ $("#add-train-btn").on("click", function(event) {
     /// GRABS USER INPUT ///
     var trainName = $("#train-name-input").val().trim();
     var destinationInput =$("#destination-input").val().trim();
-    var timeInput = $("#time-input").val().trim();
+    var timeInput = moment($("#time-input").val().trim(), "HH:mm").format("X");
     var frequencyInput = $("#frequency-input").val().trim();
 
     /// CREATING NEW LOCAL 'TEMPORARY' OBJECT FOR HOLDING THE TRAIN DATA ///
@@ -77,12 +77,23 @@ database.ref().on("child_added", function(childSnapshot)    {
     console.log(timeInput);
     console.log(frequencyInput);
 
+    /// CONVERT TRAIN TIME FROM UNIX TIME ///
+    var readableTimeInput = moment.unix(timeInput).format("HH:mm");
+
+    /// CALCULATE HOW LONG UNTIL THE NEXT TRAIN COMES ///
+    var minAway = moment().diff(moment(timeInput, "X"), "minutes");
+    
+    /// CONVERT MINUTES AWAY SO IF TRAIN HAS NOT ARRIVED, YET IT IS A POSSITIVE NUMBER AND IF THE TRAIN IS MISSED, IT'S A NEGATIVE NUMBER ///
+    var convMinAway = minAway *(-1);
+    console.log(minAway);
+
     /// CREATE NEW ROW FOR EACH TRAIN ///
     var newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(destinationInput),
-        $("<td>").text(timeInput),
-        $("<td>").text(frequencyInput)
+        $("<td>").text(readableTimeInput),
+        $("<td>").text(frequencyInput),
+        $("<td>").text(convMinAway)
     );
 
     /// APPEND THE NEW ROW TO THE TABLE
