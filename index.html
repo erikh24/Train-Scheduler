@@ -7,11 +7,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Train Scheduler</title>
 
-    <link rel="stylesheet" href="./assets/css/style.css">
-
+    >
     <!-- /// LINK TO BOOTSTRAP /// -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+         <!-- /// Link to the jQuery Library /// -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+    
+    <!-- LINK TO EXTERNAL STYLESHEET -->
+    <link rel="stylesheet" href="./assets/css/style.css">
 
 
 </head>
@@ -21,7 +30,7 @@
     <div class="container">
 
         <!-- /// THE JUMBOTRON /// -->
-        <div class="jumbotron" style="background-color: #971e31; color: #a8a3a3">
+        <div class="jumbotron">
             <h1 class="text-center text-white" style="font-size: 55px">Anytime is Train Time</h1>
             <h3 class="text-center">"Come on, ride the train it's the choo choo train"</p>
         </div>
@@ -32,15 +41,15 @@
 
                 <!-- Current Employees-->
                 <div class="card mb-4">
-                    <div class="card-header text-white"  style="background-color: #971e31">Current Train Schedule</div>
+                    <div class="card-header text-white">Current Train Schedule</div>
                     <div class="card-body">
-                        <table class="table table-sm table-hover" id='employee-table'>
+                        <table class="table table-sm table-hover" id='train-table'>
                             <thead>
                                 <tr>
                                     <th scope="col">Train Name</th>
                                     <th scope="col">Destination</th>
-                                    <th scope="col">Frequency (min)</th>
                                     <th scope="col">Next Arrival</th>
+                                    <th scope="col">Frequency (min)</th>
                                     <th scope="col">Minutes Away</th>
                                 </tr>
                             </thead>
@@ -56,7 +65,7 @@
             <div class="col-md-12">
                 <!-- /// ADD TRAIN /// -->
                 <div class="card mb-4">
-                    <div class="card-header text-white" style="background-color: #971e31" >Add Train</div>
+                    <div class="card-header text-white">Add Train</div>
                     <div class="card-body">
 
                         <!-- Entry Form -->
@@ -77,7 +86,7 @@
                                 <label for="frequency-input">Frequency (min)</label>
                                 <input class="form-control" id="frequency-input" placeholder="" type="text">
                             </div>
-                            <button class="btn btn-secondary float-left" id="add-employee-btn">Submit</button>
+                            <button class="btn btn-secondary float-left" id="add-train-btn">Submit</button>
                         </form>
 
                     </div>
@@ -91,30 +100,9 @@
 
 
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#config-web-app -->
 
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyCPNZH3OG2C0FrxKjWjBbGUV8C7wJ0d1eg",
-            authDomain: "trainscheduler-482a2.firebaseapp.com",
-            databaseURL: "https://trainscheduler-482a2.firebaseio.com",
-            projectId: "trainscheduler-482a2",
-            storageBucket: "",
-            messagingSenderId: "485087358390",
-            appId: "1:485087358390:web:3193c5d3d55d3026"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-    </script>
-
-    <!-- /// Link to the jQuery Library /// -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   
 
 
     <script src="./assets/javascript/app.js"></script>
