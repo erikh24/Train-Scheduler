@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Train Scheduler</title>
 
-    >
+    
     <!-- /// LINK TO BOOTSTRAP /// -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -20,7 +20,7 @@
     <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
 
     <!-- Moment.js REFERENCE -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
 
     <!-- LINK TO EXTERNAL STYLESHEET -->
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -28,20 +28,21 @@
 </head>
 
 <body>
-    <!-- /// THE TRAIN SCHEDULE /// -->
-    <div class="container">
 
-        <!-- /// THE JUMBOTRON /// -->
+    <!-- /// THE JUMBOTRON /// -->
+    <div class="container">
         <div class="jumbotron">
             <h1 class="text-center text-white" style="font-size: 55px">Anytime is Train Time</h1>
             <h3 class="text-center">"Come on, ride the train it's the choo choo train"</p>
+                <!--/// DISPLAY CURRENT TIME USING MOMENT.JS /// -->
+                <h5 id="time">Current Time: <span id="current-time"></span></h5>
         </div>
 
         <div class="row">
 
             <div class="col-md-12">
 
-                <!-- Current Employees-->
+                <!-- /// CURRENT TRAIN SCHEDULE /// -->
                 <div class="card mb-4">
                     <div class="card-header text-white">Current Train Schedule</div>
                     <div class="card-body">
@@ -50,8 +51,8 @@
                                 <tr>
                                     <th scope="col">Train Name</th>
                                     <th scope="col">Destination</th>
-                                    <th scope="col">Next Arrival</th>
                                     <th scope="col">Frequency (min)</th>
+                                    <th scope="col">Next Arrival</th>
                                     <th scope="col">Minutes Away</th>
                                 </tr>
                             </thead>
@@ -70,7 +71,7 @@
                     <div class="card-header text-white">Add Train</div>
                     <div class="card-body">
 
-                        <!-- Entry Form -->
+                        <!-- /// ENTRY FORM /// -->
                         <form>
                             <div class="form-group">
                                 <label for="train-name-input">Train Name</label>
@@ -81,8 +82,8 @@
                                 <input class="form-control" id="destination-input" placeholder="" type="text">
                             </div>
                             <div class="form-group">
-                                <label for="time-input">First Train Time (HH:mm - military time)</label>
-                                <input class="form-control" id="time-input" placeholder="" type="text">
+                                <label for="first-time-input">First Train Time (military time)</label>
+                                <input class="form-control" id="first-time-input" placeholder="HH:MM" type="text">
                             </div>
                             <div class="form-group">
                                 <label for="frequency-input">Frequency (min)</label>
@@ -97,15 +98,6 @@
         </div>
 
     </div>
-
-
-
-
-
-
-
-
-
 
     <script src="./assets/javascript/app.js"></script>
 

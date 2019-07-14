@@ -1,16 +1,4 @@
-
-// Steps to complete:
-
-// 1. Initialize Firebase
-// 2. Create button for adding new trains - then update the html + update the database
-// 3. Create a way to retrieve employees from the employee database.
-// 4. Create a way to calculate the months worked. Using difference between start and current time.
-//    Then use moment.js formatting to set difference in months.
-// 5. Calculate Total billed
-
-//--------------------------------------------------------------//
-
-/// 1. INITIALIZE FIREBASE ///
+/// INITIALIZE FIREBASE ///
 var firebaseConfig = {
     apiKey: "AIzaSyCPNZH3OG2C0FrxKjWjBbGUV8C7wJ0d1eg",
     authDomain: "trainscheduler-482a2.firebaseapp.com",
@@ -25,77 +13,87 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
-/// 2. CREATE BUTTON FOR ADDING NEW TRAINS - THEN UPDATE HTML + UPDATE THE DATABASE ///
-$("#add-train-btn").on("click", function(event) {
+
+function displayRealTime() {
+    setInterval(function () {
+        $('#current-time').html(moment().format('hh:mm A'))
+    }, 1000);
+}
+displayRealTime();
+
+/// CREATE BUTTON FOR ADDING NEW TRAINS  ///
+$("#add-train-btn").on("click", function (event) {
     event.preventDefault();
 
     /// GRABS USER INPUT ///
     var trainName = $("#train-name-input").val().trim();
-    var destinationInput =$("#destination-input").val().trim();
-    var timeInput = moment($("#time-input").val().trim(), "HH:mm").format("X");
+    var destinationInput = $("#destination-input").val().trim();
+    var firstTimeInput = $("#first-time-input").val().trim();
     var frequencyInput = $("#frequency-input").val().trim();
+
+
+    /// CALCULATE HOW LONG UNTIL THE NEXT TRAIN COMES ///
+    var firstTrainConverted = moment(firstTimeInput, "hh:mm").subtract(1, "years");
+
+    var currentTime = moment();
+
+    var difference = moment().diff(moment(firstTrainConverted), "minutes");
+
+    var remainder = difference % frequencyInput;
+
+    var minutesUntilNextTrain = frequencyInput - remainder;
+
+    var nextArrival = moment().add(minutesUntilNextTrain, "minutes").format("hh:mm A");
+
+
 
     /// CREATING NEW LOCAL 'TEMPORARY' OBJECT FOR HOLDING THE TRAIN DATA ///
     var newTrain = {
         name: trainName,
         desination: destinationInput,
-        time: timeInput,
-        frequency: frequencyInput
+        time: firstTimeInput,
+        frequency: frequencyInput,
+        nextArrival: nextArrival,
+        minutesUntilNextTrain: minutesUntilNextTrain,
+        currentTime: currentTime.format("hh:mm A")
     };
 
     /// UPLOADS TRAIN DATA TO THE DATABASE ///
     database.ref().push(newTrain);
 
-    /// TEST BY LOGGING TO THE CONSOLE ///
-    console.log(newTrain.name);
-    console.log(newTrain.desination);
-    console.log(newTrain.time);
-    console.log(newTrain.frequency);
-
+ 
     alert("Train successfully added");
-  
+
     /// CLEARING THE TEXT INPUT BOXES ///
     $("#train-name-input").val("");
     $("#destination-input").val("");
-    $("#time-input").val("");
+    $("#first-time-input").val("");
     $("#frequency-input").val("");
 });
 
-/// 3. CREATE FIREBASE EVENT FOR ADDING THE TRAIN TO THE DATABASE AND A ROW IN THE HTML WHEN A USER ADDS AN ENTRY ///
-database.ref().on("child_added", function(childSnapshot)    {
-    console.log(childSnapshot.val());
+/// CREATE FIREBASE EVENT FOR ADDING THE TRAIN TO THE DATABASE AND A ROW IN THE HTML WHEN A USER ADDS AN ENTRY ///
+database.ref().on("child_added", function (childSnapshot) {
 
     /// STORE EVERYTHING INTO A VARIABLE ///
     var trainName = childSnapshot.val().name;
     var destinationInput = childSnapshot.val().desination;
-    var timeInput = childSnapshot.val().time;
+    var firstTimeInput = childSnapshot.val().time;
     var frequencyInput = childSnapshot.val().frequency;
+    var nextArrival = childSnapshot.val().nextArrival;
+    var minutesUntilNextTrain = childSnapshot.val().minutesUntilNextTrain;
+    var currentTime = childSnapshot.val().currentTime;
 
-    /// TRAIN INFO ///
-    console.log(trainName);
-    console.log(destinationInput);
-    console.log(timeInput);
-    console.log(frequencyInput);
 
-    /// CONVERT TRAIN TIME FROM UNIX TIME ///
-    var readableTimeInput = moment.unix(timeInput).format("HH:mm");
-
-    /// CALCULATE HOW LONG UNTIL THE NEXT TRAIN COMES ///
-    var minAway = moment().diff(moment(timeInput, "X"), "minutes");
-    
-    /// CONVERT MINUTES AWAY SO IF TRAIN HAS NOT ARRIVED, YET IT IS A POSSITIVE NUMBER AND IF THE TRAIN IS MISSED, IT'S A NEGATIVE NUMBER ///
-    var convMinAway = minAway *(-1);
-    console.log(minAway);
-
-    /// CREATE NEW ROW FOR EACH TRAIN ///
+   /// CREATE NEW ROW FOR EACH TRAIN ///
     var newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(destinationInput),
-        $("<td>").text(readableTimeInput),
         $("<td>").text(frequencyInput),
-        $("<td>").text(convMinAway)
+        $("<td>").text(nextArrival),
+        $("<td>").text(minutesUntilNextTrain)
     );
 
     /// APPEND THE NEW ROW TO THE TABLE
     $("#train-table > tbody").append(newRow);
 });
+

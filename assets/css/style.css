@@ -1,3 +1,7 @@
+* {
+	box-sizing: border-box;
+}
+
 h3 {
     font-style: italic;
 }
@@ -13,10 +17,14 @@ h3 {
     font-weight: bold;
 }
 
+#time {
+    color: white;
+    text-align: center;
+    }
+
 .card {
     opacity: .9;
 }
-
 
 .form-control:focus {
     border-color: #FF0000;
@@ -25,5 +33,23 @@ h3 {
 
 body {
     background-image: url("../images/tracks.jpg");
-    /* background-size: 70%; */
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
 }
+
+#add-train-btn:hover {
+    background-color: #971e31;
+    transition-duration: 0.4s;
+}
+
+
+/* @media screen and (max-width: 1875px) {
+
+    body {
+        background-image: none;
+        background-color: rgb(58, 54, 54);
+    }
+    
+    
+  } */
