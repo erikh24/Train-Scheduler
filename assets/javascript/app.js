@@ -1,4 +1,3 @@
-/// INITIALIZE FIREBASE ///
 var firebaseConfig = {
     apiKey: "AIzaSyCPNZH3OG2C0FrxKjWjBbGUV8C7wJ0d1eg",
     authDomain: "trainscheduler-482a2.firebaseapp.com",
@@ -9,6 +8,7 @@ var firebaseConfig = {
     appId: "1:485087358390:web:3193c5d3d55d3026"
 };
 
+/// INITIALIZE FIREBASE ///
 firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
@@ -32,7 +32,6 @@ $("#add-train-btn").on("click", function (event) {
     var frequencyInput = $("#frequency-input").val().trim();
 
 
-    /// CALCULATE HOW LONG UNTIL THE NEXT TRAIN COMES ///
     var firstTrainConverted = moment(firstTimeInput, "hh:mm").subtract(1, "years");
 
     var currentTime = moment();
@@ -83,6 +82,19 @@ database.ref().on("child_added", function (childSnapshot) {
     var minutesUntilNextTrain = childSnapshot.val().minutesUntilNextTrain;
     var currentTime = childSnapshot.val().currentTime;
 
+    /// CALCULATE HOW LONG UNTIL THE NEXT TRAIN COMES AND UPDATE PAGE ///
+
+    var firstTrainConverted = moment(firstTimeInput, "hh:mm").subtract(1, "years");
+
+    var currentTime = moment();
+
+    var difference = moment().diff(moment(firstTrainConverted), "minutes");
+
+    var remainder = difference % frequencyInput;
+
+    var minutesUntilNextTrain = frequencyInput - remainder;
+
+    var nextArrival = moment().add(minutesUntilNextTrain, "minutes").format("hh:mm A");
 
    /// CREATE NEW ROW FOR EACH TRAIN ///
     var newRow = $("<tr>").append(
